@@ -1,0 +1,113 @@
+mqtt:
+  enabled: False
+
+tls:
+  enabled: False
+
+ffmpeg:
+  hwaccel_args: preset-nvidia
+
+notifications:
+  enabled: False
+  email: "admin@example.com"
+  cooldown: 0
+
+face_recognition:
+  enabled: True
+
+lpr:
+  enabled: True
+
+timestamp_style:
+  position: "tl"
+  format: "%m/%d/%Y %H:%M:%S"
+  color:
+    red: 255
+    green: 255
+    blue: 255
+  thickness: 2
+  effect: solid
+
+record:
+  enabled: True
+  retain:
+    days: 7
+    mode: motion
+  alerts:
+    retain:
+      days: 30
+  detections:
+    retain:
+      days: 30
+
+snapshots:
+  enabled: True
+  retain:
+    default: 30
+
+go2rtc:
+  streams:
+    test1:
+      - ffmpeg:rtsp://admin:pass@192.168.178.105:554/Streaming/channels/101
+    test1-sub:
+      - ffmpeg:rtsp://admin:pass@192.168.178.105:554/Streaming/channels/102
+    test1:
+      - ffmpeg:rtsp://admin:pass@192.168.178.111:554/0
+    test1-sub:
+      - ffmpeg:rtsp://admin:pass@192.168.178.111:554/1
+cameras:
+### TESTS
+  test1:
+    enabled: True
+    ffmpeg:
+      inputs:
+        - path:
+            rtsp://admin:pass@192.168.178.105:554/Streaming/channels/101
+          roles:
+            - record
+        - path:
+            rtsp://admin:pass@192.168.178.105:554/Streaming/channels/102
+          roles:
+            - detect
+    motion:
+      threshold: 40
+      contour_area: 20
+      improve_contrast: True
+    record:
+      enabled: True
+    detect:
+      enabled: True
+    objects:
+      track:
+        - person
+        - car
+        - dog
+        - cat
+  test2:
+    enabled: True
+    ffmpeg:
+      inputs:
+        - path:
+            rtsp://admin:pass@192.168.178.111:554/0
+          roles:
+            - record
+        - path:
+            - ffmpeg:rtsp://admin:pass@192.168.178.111:554/1
+          roles:
+            - detect
+    motion:
+      threshold: 40
+      contour_area: 20
+      improve_contrast: True
+    record:
+      enabled: True
+    detect:
+      enabled: True
+    objects:
+      track:
+        - person
+        - car
+        - dog
+        - cat
+
+version: 0.16-0
